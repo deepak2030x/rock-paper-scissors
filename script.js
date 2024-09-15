@@ -9,83 +9,106 @@ function getComputerChoice() {
   return arr[choice];
 }
 
-// Step-3: logic to get the human choice
+// Step-3: declaring global variables to keep track of human score and computer score.
 
-function getHumanChoice() {
-  let choice = prompt("Enter your choice? Rock, Paper, Scissor")
-    ?.toLowerCase()
-    .trim();
-  while (choice == undefined || choice == "") {
-    choice = prompt("Enter your choice? Rock, Paper, Scissor")
-      ?.toLowerCase()
-      .trim();
-  }
-  if (choice == "rock" || choice == "paper" || choice == "scissor") {
-    return choice;
-  } else {
-    return getHumanChoice();
-  }
-}
+let humanScore = 0;
+let computerScore = 0;
 
-// console.log(getHumanChoice());
+// Step-4: grabbing all dom elements to update UI.
+const ul = document.querySelector("ul");
+const human = document.querySelector(".human");
+const computer = document.querySelector(".computer");
 
-// Step-6: logic to play entire game
+// Step-5: logic for the game
 
-function playGame() {
-  // Step-4: declaring local variables to keep track of human score and computer score.
+function playRound(humanChoice, computerChoice) {
+  const li = document.createElement("li");
+  let content = `Your choice ${humanChoice} and Computer choice ${computerChoice}.`;
 
-  let humanScore = 0,
-    computerScore = 0;
-
-  // Step-5: logic to play a single round
-
-  function playRound(humanChoice, computerChoice) {
-    // your code here!
-    if (humanChoice == computerChoice) {
-      console.log("Tie");
-    } else if (humanChoice == "paper") {
-      if (computerChoice == "rock") {
-        humanScore++;
-        console.log("You won, paper beats rock.");
-      } else {
-        computerScore++;
-        console.log("Computer won, scissor beats paper");
-      }
-    } else if (humanChoice == "rock") {
-      if (computerChoice == "scissor") {
-        humanScore++;
-        console.log("You won, rock beats scissor.");
-      } else {
-        computerScore++;
-        console.log("Computer won, paper beats rock");
-      }
-    } else if (humanChoice == "scissor") {
-      if (computerChoice == "paper") {
-        humanScore++;
-        console.log("You won, scissor beats paper.");
-      } else {
-        computerScore++;
-        console.log("Computer won, rock beats scissor");
-      }
+  if (humanChoice == computerChoice) {
+    li.textContent = content + "It's a Tie";
+  } else if (humanChoice == "paper") {
+    if (computerChoice == "rock") {
+      humanScore++;
+      li.textContent = content + "You won";
+      human.textContent = `${humanScore}`;
+    } else {
+      computerScore++;
+      li.textContent = content + "Computer won";
+      computer.textContent = `${computerScore}`;
+    }
+  } else if (humanChoice == "rock") {
+    if (computerChoice == "scissor") {
+      humanScore++;
+      li.textContent = content + "You won";
+      human.textContent = `${humanScore}`;
+    } else {
+      computerScore++;
+      li.textContent = content + "Computer won";
+      computer.textContent = `${computerScore}`;
+    }
+  } else if (humanChoice == "scissor") {
+    if (computerChoice == "paper") {
+      humanScore++;
+      li.textContent = content + "You won";
+      human.textContent = `${humanScore}`;
+    } else {
+      computerScore++;
+      li.textContent = content + "Computer won";
+      computer.textContent = `${computerScore}`;
     }
   }
-
-  for (let i = 0; i < 5; i++) {
-    const humanSelection = getHumanChoice();
-    const computerSelection = getComputerChoice();
-
-    playRound(humanSelection, computerSelection);
-  }
-
-  if (humanScore == computerScore) {
-    console.log("Tie");
-  } else if (humanScore > computerScore) {
-    console.log("Final winner you.");
-  } else {
-    console.log("Final winner Computer.");
-  }
+  ul.appendChild(li);
 }
 
-// play the game.
+// logic to re-start the game.
 
-playGame();
+const start = document.querySelector(".restart");
+
+function restart() {
+  const text = document.createTextNode("Want to play once again");
+  const btn = document.createElement("button");
+  btn.textContent = "Yes";
+  btn.addEventListener("click", (e) => {
+    buttons.forEach((b) => {
+      b.disabled = false;
+    });
+    ul.innerHTML = "";
+    humanScore = 0;
+    computerScore = 0;
+    human.textContent = 0;
+    computer.textContent = 0;
+    winner.textContent = "";
+    start.textContent = "";
+  });
+  start.appendChild(text);
+  start.appendChild(btn);
+}
+
+// logic to start the game
+const buttons = document.querySelectorAll(".btn");
+const winner = document.querySelector(".winner");
+
+buttons.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    const humanSelection = e.target.textContent.toLowerCase();
+    const computerSelection = getComputerChoice();
+    playRound(humanSelection, computerSelection);
+    if (humanScore == 5) {
+      winner.textContent = "Game finished, You are winner";
+      buttons.forEach((b) => {
+        b.disabled = true;
+      });
+      restart();
+      return;
+    }
+    if (computerScore == 5) {
+      winner.textContent = "Game finished, Computer is winner";
+      buttons.forEach((b) => {
+        b.disabled = true;
+      });
+      restart();
+      return;
+    }
+  });
+});
