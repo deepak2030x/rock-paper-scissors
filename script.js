@@ -23,7 +23,7 @@ const computer = document.querySelector(".computer");
 
 function playRound(humanChoice, computerChoice) {
   const li = document.createElement("li");
-  let content = `Your choice ${humanChoice} and Computer choice ${computerChoice}.`;
+  let content = `Your choice ${humanChoice} and Computer choice ${computerChoice}. `;
 
   if (humanChoice == computerChoice) {
     li.textContent = content + "It's a Tie";
@@ -66,9 +66,10 @@ function playRound(humanChoice, computerChoice) {
 const start = document.querySelector(".restart");
 
 function restart() {
-  const text = document.createTextNode("Want to play once again");
+  const text = document.createTextNode("Want to play once again?");
   const btn = document.createElement("button");
   btn.textContent = "Yes";
+  btn.classList.add("btn");
   btn.addEventListener("click", (e) => {
     buttons.forEach((b) => {
       b.disabled = false;
@@ -95,7 +96,7 @@ buttons.forEach((btn) => {
     const computerSelection = getComputerChoice();
     playRound(humanSelection, computerSelection);
     if (humanScore == 5) {
-      winner.textContent = "Game finished, You are winner";
+      winner.textContent = "Game finished, You are winner.";
       buttons.forEach((b) => {
         b.disabled = true;
       });
@@ -103,7 +104,7 @@ buttons.forEach((btn) => {
       return;
     }
     if (computerScore == 5) {
-      winner.textContent = "Game finished, Computer is winner";
+      winner.textContent = "Game finished, Computer is winner.";
       buttons.forEach((b) => {
         b.disabled = true;
       });
